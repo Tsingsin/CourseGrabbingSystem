@@ -166,7 +166,7 @@
           <configuration>
             <!-- 允许移动生成的文件 -->
             <verbose>true</verbose>
-            <!-- 允许自动覆盖文件 企业一般不用-->
+            <!-- 允许自动覆盖文件 一般不用-->
             <overwrite>false</overwrite>
             <!-- mybatis-generator配置文件的路径-->
             <configurationFile>
