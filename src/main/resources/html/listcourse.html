@@ -1,0 +1,82 @@
+<html>
+<head>
+	<meta charset="UTF-8">
+	<link href="static/assets/global/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+	<link href="static/assets/global/css/components.css" rel="stylesheet" type="text/css"/>
+	<link href="static/assets/admin/pages/css/login.css" rel="stylesheet" type="text/css"/>
+	<script src="static/assets/global/plugins/jquery-1.11.0.min.js" type="text/javascript"></script>
+	<script src="./gethost.js" type="text/javascript"></script>
+	<title>Title</title>
+</head>
+<body>
+<div class="content">
+	<h3 class="form-title">课程列表浏览</h3>
+	<div class="table-responsive">
+		<table class="table">
+			<thead>
+			<tr>
+				<th>课程名称</th>
+				<th>课程学分</th>
+				<th>任课教师</th>
+				<th>考核方式</th>
+				<th>上课时间</th>
+				<th>课程人数名额</th>
+			</tr>
+			</thead>
+
+			<tbody id="container">
+
+			</tbody>
+		</table>
+	</div>
+</div>
+</body>
+
+<script>
+	// 定义全局课程数组信息
+	var g_itemList = [];
+
+	$(document).ready(function() {
+		$.ajax({
+			type: "GET",
+			url: "http://"+g_host+"/course/list",
+			xhrFields:{
+				withCredentials:true,
+			},
+			success: function(data) {
+				if (data.status == "success") {
+					g_itemList = data.data;
+					reloadDom();
+				} else {
+					alert("获取课程信息失败，原因为" + data.data.errMsg);
+				}
+			},
+			error: function(data) {
+				alert("获取课程信息失败，原因为" + data.responseText);
+			}
+		});
+	});
+
+	function reloadDom() {
+		for (var i = 0; i < g_itemList.length; i++) {
+			var courseVO =g_itemList[i];
+			var dom =
+					"<tr data-id='"+courseVO.id+"' id='courseDetail"+courseVO.id+"'>\
+			<td>"+courseVO.title+"</td>\
+			<td>"+courseVO.credit+"</td>\
+			<td>"+courseVO.teacher+"</td>\
+			<td>"+courseVO.mode+"</td>\
+			<td>"+courseVO.time+"</td>\
+			<td>"+courseVO.stock+"</td>\
+			</tr>";
+			$("#container").append($(dom));
+			//点击一行任意的位置 跳转到课程详情页
+			$("#courseDetail"+courseVO.id).on("click", function(e) {
+				window.location.href="getcourse.html?id="+$(this).data("id");
+			});
+		}
+
+	}
+</script>
+
+</html></html>
